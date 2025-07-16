@@ -1,0 +1,122 @@
+#!/bin/sh
+
+script_dir=$(cd $(dirname $0);pwd)
+type=$1
+echo "type: ${type}"
+echo "💊👌🐒🐂👏🏿🌹⬆️㊙️🐱🎩🐂🐲✈️👀🚀🔥🎮💕🏆🎁 💯 🌹"
+
+function upload(){
+    apk_dir="${script_dir}/build/outputs/apk"
+    universal_apk_dir="${apk_dir}/universal/$type"
+
+    apk_path=$(find ${universal_apk_dir} -name "*.apk")
+    apk_name=${apk_path##*/}
+    version_name=$(echo $apk_name | sed 's/^v//;s/_.*//')
+    version_code=$(grep VERSION_CODE version.properties | cut -d'=' -f2)
+    echo "universal_apk_dir: ${universal_apk_dir}"
+    echo "apk_name: ${apk_name}"
+    echo "版本号: ${version_name}(Build ${version_code})"
+
+    # 本地文件路径
+    # 测试只需传通用包
+    local_universal_file_path=$universal_apk_dir/$apk_name
+    bucket_name="your_bucket_name/apks"
+    # 清空桶 rclone delete r2lz:bellybook2 --progress
+    if [ "$type" = "release" ]; then
+        # 正式环境上传流程
+        endpoint="your_endpoint_url"
+        remote_universal_file_path="$bucket_name/history/$apk_name"
+
+        # 1. 上传通用包
+        echo "🚀 正式环境正在上传 $local_universal_file_path \n至 $remote_universal_file_path"
+        rclone copyto ${local_universal_file_path}  ${remote_universal_file_path} --progress
+
+        echo "🚀 把包从 history 里 cp 出来"
+        rclone copyto ${remote_universal_file_path} ${bucket_name}/fake_live.apk --progress
+        # 2. 上传 google 包先不上传
+#        local_google_file_path="$apk_dir/google/$type/$apk_name"
+#        remote_google_file_path="$bucket_name/google/$apk_name"
+#        echo "🚀 上传 google 包 ${local_google_file_path} 至 ${remote_google_file_path}"
+#        rclone copyto ${local_google_file_path}  ${remote_google_file_path} --progress
+        # 3. 上传 china 包
+        rclone delete $bucket_name/china
+        local_china_file_path="$apk_dir/china/$type/$apk_name"
+        remote_china_file_path="$bucket_name/china/$apk_name"
+        echo "🚀 上传 china 包针对中国镜内应用市场 ${local_china_file_path} 至 ${remote_china_file_path}"
+        rclone copyto ${local_china_file_path}  ${remote_china_file_path} --progress
+        # 列出桶
+        rclone ls $bucket_name
+        echo "rclone copy $remote_china_file_path ~/Downloads/ --progress"
+    else
+        # 测试环境上传流程 就一个 apk
+        remote_universal_file_path="$bucket_name/fake_live_test.apk"
+        echo "🚀 测试环境正在上传 ${local_universal_file_path} \n至 ${remote_universal_file_path}"
+        rclone copyto ${local_universal_file_path}  ${remote_universal_file_path} --progress
+      fi
+}
+
+function webhook() {
+    if [ "$type" = "release" ]; then
+        update_env="生产"
+    else
+        update_env="测试"
+    fi
+    updatetime=`date +'%Y-%m-%d %H:%M:%S'`
+    # 更新内容
+    update_description="- 回忆模块重构\n- 创建云朵精简"
+    curl -X POST -H "Content-Type: application/json" \
+	-d '{
+	"msg_type": "post",
+	"content": {
+		"post": {
+			"zh_cn": {
+				"title": "App 更新通知",
+				"content": [
+                    [{"tag": "text","text": "您的应用上传了新版本"}],
+                    [{"tag": "text","text": "应用名称：那朵('"${update_env}"')"}],
+                    [{"tag": "text","text": "应用类型：Android"}],
+                    [{"tag": "text","text": "版本信息：'"${version_name}"'(Build '"${version_code}"')"}],
+                    [{"tag": "text","text": "更新时间：'"${updatetime}"'"}],
+                    [{"tag": "text","text": "更新内容：'"${update_description}"'"}],
+                    [{"tag": "text","text": "版本查询：'"${baseUrl}"'/naduo/api/version/getVersion?platform=android"}],
+
+					[
+						{
+							"tag": "a",
+							"text": "点链接查看更新",
+							"href": "https://naduo.love"
+						},
+						{
+							"tag": "at",
+							"user_id": "all",
+                            "user_name": "所有人"
+						}
+				    ]
+                ]
+			}
+		}
+	}
+    }' \
+    https://open.feishu.cn/open-apis/bot/v2/hook/ef329f6f-c9c5-4d5
+}
+
+function start()
+{
+    starttime=`date +'%Y-%m-%d %H:%M:%S'`
+    echo "上传开始时间 : " ${starttime}
+    upload
+    if [ "$type" = "release" ]; then
+        echo "正式 手动掉用发版接口"
+    else
+        echo "测试 自动掉用发版接口"
+#        webhook
+    fi
+
+
+    endtime=`date +'%Y-%m-%d %H:%M:%S'`
+    echo "结束时间 : " ${endtime}
+    echo "您有一个新的App版本，请及时更新👌 🔥 👌 🔥 💯 🔥 💯 🔥 💯 🔥 💯 👌 🔥 👌 🔥 💯 🔥 💯 🔥 💯 🔥 💯 🔥 💯 🔥 💯 🔥"
+}
+
+start
+# upload

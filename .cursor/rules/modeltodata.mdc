@@ -1,0 +1,38 @@
+---
+description: 把 Swift struct 转成 Kotlin 中的 class
+globs: 
+alwaysApply: false
+---
+- 文件名与 swift 中的保持一致，swift 一个文件里有几个模型，Kotlin 文件中就有几个模型
+- 转换前后的文件名、类、属性、值、注释。大小写均保持一致
+- struct 转成 @keep @Serializable data class，忽略 swift 中的协议 Convertible。swift 中的 var 转成 val。
+示例：
+```
+// 转换前
+struct BaseFoodItem: Convertible {
+    var unit: String = "gram"
+}
+
+// 转换后
+@Keep
+data class BaseFoodItem(
+    val unit: String = "gram"
+)
+```
+- enum 转成 @keep enum class。swift中的 key = "value" 转成 enum class 的属性并赋值
+示例：
+```
+// 转换前
+enum ImageAnalysisEventType: String {
+    // Step 1 Events
+    case imageRecognitionStarted = "image_recognition_started"
+}
+
+// 转换后
+@Keep
+enum class BaseFoodItem(val value: String) {
+    imageRecognitionStarted(value = "image_recognition_started")
+}
+
+```
+- 遇到 Date 的话 使用 LocalDate ，参照 [LocalDate+.kt](mdc:app/src/main/java/com/fantasy/components/extension/LocalDate+.kt)

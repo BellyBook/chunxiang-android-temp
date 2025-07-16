@@ -1,0 +1,31 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+
+# Android 项目更改包名操作步骤
+
+---
+
+1. **重命名源代码目录**
+   - 使用 IDE（如 Android Studio）自带的 Refactor 功能进行包名重命名，将 `app/src/main/java/com/fantasy/cctemplate/` 目录重命名为新包名对应的目录结构，如 `app/src/main/java/com/example/newname/`。
+   - 同步修改测试代码目录（如有）：`app/src/test/java/com/fantasy/cctemplate/`。
+
+2. **全局搜索资源和配置文件中的包名**
+   - 全局查找并替换所有源代码 `cctemplate` 为新包名。
+
+3. **修改 AndroidManifest.xml**
+   - 打开 `app/src/main/AndroidManifest.xml`，将 `package="com.fantasy.cctemplate"` 改为新包名。
+
+4. **修改 build.gradle 配置**
+   - 打开 `app/build.gradle.kts` 或 `app/build.gradle`，将 `applicationId = "com.fantasy.cctemplate"` 改为新包名。
+
+5. **全局搜索确认无遗漏**
+   - 使用 IDE 的全局搜索功能，确保所有地方的旧包名都已替换为新包名。
+
+6. **重新编译并测试**
+   - 完成上述修改后，重新编译项目并全面测试，确保功能正常。
+
+---
+

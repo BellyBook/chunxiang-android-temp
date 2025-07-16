@@ -1,0 +1,72 @@
+---
+description: swift API 转换成 kotlin API
+globs: 
+alwaysApply: false
+---
+- 文件名与 swift 中的保持一致，swift 一个文件里有几个请求对象，Kotlin 文件中就有几个请求对象
+- 转换前后的文件名、类、属性、值、注释。大小写均保持一致，不用删除旧文件
+- 规则：
+1. enum TestAPI: CCAPITarget 转成 object TestAPI
+2. swift enum 中 method 中为 .post 转成 networking.post<JsonElement>("group/enum 的名称"）
+3. swift enum 中 method 中为 .get 转成 networking.get<JsonElement>("group/enum 的名称"）
+4. parameters 用传参的形式传给函数, setbody 用 buildJsonObject 传
+- 转换示例如下：
+```
+// 转换前
+enum TestAPI: CCAPITarget {
+    ///  短信验证码注册
+    case send_verification_code(phone: String)
+    case verify_verification_code(phone :String,code:String)
+
+    var group: String {
+        return "/api/v1/auth"
+    }
+
+    var method: HTTPRequestMethod {
+        switch self {
+        default: return .post
+        }
+    }
+
+    var parameters: [String: Any]? {
+        switch self {
+        case .send_verification_code(let phone): return ["phone": phone]
+        case .verify_verification_code(let phone, let code):
+            return ["phone": phone,"code":code]
+        }
+    }
+}
+
+// 转换后
+object LoginAPI {
+    suspend fun send_verification_code(
+        phone: String
+    ) = networking.post<JsonElement>("api/v1/auth/send_verification_code") {
+        setBody(
+            buildJsonObject {
+                put("phone", phone)
+            }
+        )
+    }
+
+    suspend fun verify_verification_code(
+        phone: String,
+        code: String,
+    ) = networking.post<CCToken>( "api/v1/auth/verify_verification_code") {
+        setBody(
+             buildJsonObject {
+                put("phone", phone)
+                put("code", code)
+            }
+        )
+    }
+}
+
+```
+
+注意事项：
+可能需要导入
+import com.fantasy.components.network.post
+import io.ktor.client.request.setBody
+import kotlinx.serialization.json.*
+

@@ -1,0 +1,46 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+- 参考 [local.mdc](mdc:.cursor/rules/local.mdc)  把指定文件夹、文件下的中文字符串提取到出来、仅处理中文字符串
+- 除了 cclog 不用处理，其它的都需要处理
+- 在给本地化字符串命名时，格式为： "模块前缀_name"
+- name 要尽可能的有意义
+- 不用新创建 string.xml 文件。只针对现有 string 文件进行处理
+- 代码中使用本地化字符串，请使用 [Local+.kt](mdc:app/src/main/java/com/fantasy/components/extension/Local+.kt) 文件里的 local() 或 local(vararg formatArgs: Any) 方法。比如 R.string.date_picker_year_month_format.local()
+需要导入 
+import com.fantasy.components.extension.local
+
+import com.fantasy.stomachbook.R
+
+示例如下
+```xml
+
+<string name="date_picker_year_month_format">%s年%s</string>
+<string name="date_picker_month_1">一月</string>
+<string name="date_picker_month_2">二月</string>
+<string name="date_picker_month_3">三月</string>
+<string name="date_picker_month_4">四月</string>
+<string name="date_picker_month_5">五月</string>
+<string name="date_picker_month_6">六月</string>
+<string name="date_picker_month_7">七月</string>
+<string name="date_picker_month_8">八月</string>
+<string name="date_picker_month_9">九月</string>
+<string name="date_picker_month_10">十月</string>
+<string name="date_picker_month_11">十一月</string>
+<string name="date_picker_month_12">十二月</string>
+<string name="date_picker_month_number_format">%s月</string>
+
+<string name="date_picker_week_sun">周日</string>
+<string name="date_picker_week_mon">周一</string>
+<string name="date_picker_week_tue">周二</string>
+<string name="date_picker_week_wed">周三</string>
+<string name="date_picker_week_thu">周四</string>
+<string name="date_picker_week_fri">周五</string>
+<string name="date_picker_week_sat">周六</string>
+```
+
+### 在进行本地化翻译时
+- [strings.xml](mdc:app/src/main/res/values/strings.xml) 的值使用英文
+- [strings.xml](mdc:app/src/main/res/values-zh/strings.xml) 的值使用中文

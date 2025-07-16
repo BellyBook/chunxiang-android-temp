@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 添加网络权限 -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <!-- 震动 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Android 12 及以下使用 -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <!-- Android 13 及以上使用 -->
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_IMAGES"
+        android:minSdkVersion="33" />
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_AUDIO"
+        android:minSdkVersion="33" />
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_VIDEO"
+        android:minSdkVersion="33" />
+    <!-- 相机权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- 显式移除第三方SDK引入的位置权限 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" tools:node="remove" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" tools:node="remove" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" tools:node="remove" />
+
+    <queries>
+        <!-- 微信 -->
+        <package android:name="com.tencent.mm" />
+        <intent>
+            <action android:name="com.getui.sdk.action" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".MainApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:networkSecurityConfig="${network_security_xml}"
+        android:icon="${app_logo}"
+        android:label="${app_name}"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:replace="android:label"
+        tools:targetApi="35">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

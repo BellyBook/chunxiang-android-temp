@@ -1,0 +1,57 @@
+---
+description: 把 iOS SwiftUI 代码翻译成 Composable
+globs: 
+alwaysApply: false
+---
+
+# 基本原则
+变量名、函数名及大小写和 swift 代码中保持一致。比如不要把 vm 改成 viewModel 。enum class 的大小写也要保持一致
+1. Text 使用 [CCText.kt](mdc:app/src/main/java/com/fantasy/components/widget/CCText.kt) 里的 style 和 color 合并成一个 CCFont 。颜色通过 .f1c 这种点出来。原则上参照 [CCDesign.kt](mdc:app/src/main/java/com/fantasy/components/theme/CCDesign.kt) 
+2. 如果碰到 Swift 里使用 .font(.system) ... 的，转成 CCFont 和 CCColor 示例如下 
+
+
+输入：
+```
+Text("胃之书")
+    .font(.system(size: 78, weight: .bold, design: .monospaced))
+    .foregroundStyle(Color.CCColor.f1)
+    .background(Color.CCColor.b1)
+
+CCText("胃之书")
+    .font(.system(size: 28, design: .monospaced))
+    .foregroundStyle(Color.CCColor.f1)
+```
+
+转换后：
+```
+Text(
+    text = "胃之书",
+    style = CCFont.f1b.v1.f1c.size(78),
+    modifier = Modifier.background(CCColor.b1)
+)
+
+CCText(
+    text = "胃之书",
+    style = CCFont.f1.v1.f1c.size(28),
+)
+```
+
+
+3. thinLine 使用 [CCLine.kt](mdc:app/src/main/java/com/fantasy/components/widget/CCLine.kt) 里的 `CCHLine` 
+4. 导航用 AppHelper [AppHelper.kt](mdc:app/src/main/java/com/fantasy/components/tools/AppHelper.kt)
+5. viewmodel 默认继承 [BaseViewModel.kt](mdc:app/src/main/java/com/fantasy/components/base/BaseViewModel.kt) BaseViewModel 类
+6. 遇到 `UIScreen.main.bounds.height * 0.5` 转成 `screenHight * 0.5f`  `screenWith`
+7. 转成 Image 时 使用 [Image+.kt](mdc:app/src/main/java/com/fantasy/components/extension/compose/Image+.kt) 传入 id
+8. `ScrollView` 使用 `LazyColumn`
+9. `PaddingValues` 使用 [PaddingValues+.kt](mdc:app/src/main/java/com/fantasy/components/extension/compose/PaddingValues+.kt)  `CCPaddingValues`
+10. `CCDesigin.CCBigButton` 使用 [BBDesign.kt](mdc:app/src/main/java/com/fantasy/stomachbook/components/BBDesign.kt) 里的 `CCBigButton`
+12. `AppHelper.shared.mada` 使用 mada()
+13. `CCWebImage` 使用 [CCCoilImage.kt](mdc:app/src/main/java/com/fantasy/components/widget/CCCoilImage.kt)
+14. 遇到 swift 中的 TextField 使用 [CCTextFiled.kt](mdc:app/src/main/java/com/fantasy/components/widget/CCTextFiled.kt)
+15. 遇到 swift 中的 CCTextField 使用 [BBDesign.kt](mdc:app/src/main/java/com/fantasy/stomachbook/components/BBDesign.kt) 中的 CCTextField
+16. 遇到 swift 中的 CCFormRow 使用 [BBDesign.kt](mdc:app/src/main/java/com/fantasy/stomachbook/components/BBDesign.kt) 中的 CCFormRow
+17. 照片选择应使用 [UIImage.kt](mdc:app/src/main/java/com/fantasy/components/tools/UIImage.kt) 中的 rememberLauncherUIImage 方法 通过 openAlbum 打开
+18. 遇到 swift 中的 CCEditLayout 使用 [CCSheetScaffold.kt](mdc:app/src/main/java/com/fantasy/components/widget/CCSheetScaffold.kt)
+19. 忽略 : CCListAPIRequest，直接把实现放到 viewmodel 里
+20. 遇到 swift 中的 mada 使用 [Index.kt](mdc:app/src/main/java/com/fantasy/components/tools/Index.kt) 里的 mada()
+<!-- 10 `LazyVGrid` 使用 `LazyVerticalGrid` -->

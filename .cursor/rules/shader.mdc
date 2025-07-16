@@ -1,0 +1,18 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+1. 参考上述代码。使用 ASGL 在Android Compose中实现一摸一样的效果。可以忽略鼠标交互部分，因为移动设备不需要考虑鼠标交互。
+2. 用 float 代替 bool, 比如 setBoolUniform 替换成 setFloatUniform
+3. 参照 [IShaderScreen.kt](mdc:app/src/main/java/com/fantasy/stomachbook/components/shader/IShaderScreen.kt) [MetaBallsShader.kt](mdc:app/src/main/java/com/fantasy/stomachbook/components/shader/MetaBallsShader.kt) [NorthernLightsShader.kt](mdc:app/src/main/java/com/fantasy/stomachbook/components/shader/NorthernLightsShader.kt) [MetaBallsShaderCanvas.kt](mdc:app/src/main/java/com/fantasy/stomachbook/components/shader/canvas/MetaBallsShaderCanvas.kt) [CCShaderCanvas.kt](mdc:app/src/main/java/com/fantasy/stomachbook/components/shader/canvas/CCShaderCanvas.kt) 。且不要修改。canvas 都继承自 [CCShaderCanvas.kt](mdc:app/src/main/java/com/fantasy/stomachbook/components/shader/canvas/CCShaderCanvas.kt)
+4. 和提供的代码一样添加注释
+5. 实现后请在 [DebugShaderView.kt](mdc:app/src/main/java/com/fantasy/stomachbook/view/debug/DebugShaderView.kt) 里展示
+6. 在设置shader的uniform数组元素时不要使用了动态索引字符串拼接的方式，尽量使用使用单一变量名。
+7. 实现 shader 效果可参考以下链接
+https://medium.com/@off.mind.by/first-look-at-runtimeshaders-in-compose-b0b431083644
+https://developer.android.com/reference/android/graphics/RuntimeShader
+8. 可以使用 web 搜索
+9. 不要修改 [CCShaderCanvas.kt](mdc:app/src/main/java/com/fantasy/stomachbook/components/shader/canvas/CCShaderCanvas.kt)
+10. ASGL 没有 fmod
+11. 如果需要 [CCShaderCanvas.kt](mdc:app/src/main/java/com/fantasy/stomachbook/components/shader/canvas/CCShaderCanvas.kt) 里的 onFrameRefresh 可以用来作动画帧
