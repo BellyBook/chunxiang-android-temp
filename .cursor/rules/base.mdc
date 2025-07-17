@@ -1,0 +1,72 @@
+---
+alwaysApply: true
+---
+
+# 项目开发基础规则（Base Rules）
+#
+# 本文件为 CCTemplate-Android 项目开发的基础规范，所有开发成员需遵循。
+#
+# =========================
+# 一、UI 界面制作
+# =========================
+1. 独立页面的容器必须使用 @CCScaffold.kt。
+2. 颜色、字体必须使用 @CCDesign.kt 中定义的 CCColor/CCFont，如 CCColor.f1、CCFont.f1.v1。
+3. 图标（Icon）初始化必须用 @Icon+.kt，图片（Image）初始化必须用 @Image+.kt。
+4. 文本（Text）必须直接用 style 并应用 @CCDesign.kt 中的 CCFont，如 CCFont.f1.v1，禁止单独使用 fontSize 和 color，可参考 @TextStyle+.kt。
+5. 按钮（Button）可以使用 @CCButton.kt 
+6. UI 相关开发重点关注 @/compose 和 @/widget 两个文件夹。
+7. 新建 UI 文件需放在 view 文件夹下。
+
+# =========================
+# 二、网络请求
+# =========================
+1. 新建 API 相关文件需放在 api 文件夹下。
+2. 网络请求统一使用 networking，相关实现参考 api/networking 文件夹。
+
+# =========================
+# 三、数据模型
+# =========================
+1. 新建数据模型文件需放在 model 文件夹下。
+2. 新建 data class 须在类上方加注解 @Keep @Serializable。
+
+# =========================
+# 其他说明
+# =========================
+# 代码需带有中文注释，采用 ASC2 风格分块注释，提升可读性。
+# 遵循 MVP 思想，保持项目结构清晰，避免早期熵增。
+# 代码以人为本，兼顾可运行性。
+
+# 项目开发基础规则（Base Rules）
+#
+# 本文件为 CCTemplate-Android 项目开发的基础规范，所有开发成员需遵循。
+#
+# =========================
+# 一、UI 界面制作
+# =========================
+1. 独立页面的容器必须使用 @CCScaffold.kt。
+2. 颜色、字体必须使用 @CCDesign.kt 中定义的 CCColor/CCFont，如 CCColor.f1、CCFont.f1.v1。
+3. 图标（Icon）初始化必须用 @Icon+.kt，图片（Image）初始化必须用 @Image+.kt。
+4. 文本（Text）必须直接用 style 并应用 @CCDesign.kt 中的 CCFont，如 CCFont.f1.v1，禁止单独使用 fontSize 和 color，可参考 @TextStyle+.kt。
+5. 按钮（Button）可以使用 @CCButton.kt 
+6. UI 相关开发重点关注 @/compose 和 @/widget 两个文件夹。
+7. 新建 UI 文件需放在 view 文件夹下。
+
+# =========================
+# 二、网络请求
+# =========================
+1. 新建 API 相关文件需放在 api 文件夹下。
+2. 网络请求统一使用 networking，相关实现参考 api/networking 文件夹。
+
+# =========================
+# 三、数据模型
+# =========================
+1. 新建数据模型文件需放在 model 文件夹下。
+2. 新建 data class 须在类上方加注解 @Keep @Serializable。
+
+# =========================
+# 其他说明
+# =========================
+# 代码需带有中文注释，采用 ASC2 风格分块注释，提升可读性。
+# 遵循 MVP 思想，保持项目结构清晰，避免早期熵增。
+# 代码以人为本，兼顾可运行性。
+

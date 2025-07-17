@@ -1,24 +1,30 @@
 package com.fantasy.cctemplate.api
 
 import androidx.annotation.Keep
+import com.fantasy.components.extension.toStringFormat
 import com.fantasy.components.network.NetworkResponse
 import com.fantasy.components.network.get
 import com.fantasy.stomachbook.api.networking.networking
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.request.url
 import io.ktor.http.parameters
+import io.ktor.http.path
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
 
 object PublicAPI {
-    suspend fun getUser() = networking.get<JsonElement>("https://api.github.com/users/AndroidDeveloperJourney")
-
     // http://v.juhe.cn/todayOnhistory/queryEvent.php?key=e1300567e653b2e517e66f609d006e42&date=${dateFormat}
-    suspend fun getTodayOnHistory(date: String) = networking.get<HistoryResponse>("http://v.juhe.cn/todayOnhistory/queryEvent.php") {
-        parameters {
-            append("date", date)
-            append("key", "e1300567e653b2e517e66f609d006e42")
+    suspend fun getTodayOnHistory(date: LocalDate) = networking.get("http://v.juhe.cn/todayOnhistory/queryEvent") {
+        url {
+            parameter("date", date.toStringFormat("M/d"))
+            parameter("key", "e1300567e653b2e517e66f609d006e42")
         }
     }
+        .body<HistoryResponse>()
 }
 
 // 顶层响应
